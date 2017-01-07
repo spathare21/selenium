@@ -1,5 +1,7 @@
 package org.openqa.selenium.interactive;
 
+import static org.openqa.selenium.interactive.PointerInput.Kind.MOUSE;
+
 import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
@@ -9,17 +11,21 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class Actions {
 
   private final Map<InputDevice, Sequence> sequences = new HashMap<>();
-  private final MouseInput defaultMouse = new MouseInput("default mouse", /* primary */ true);
+  private final PointerInput defaultMouse = new PointerInput(
+      MOUSE,
+      Optional.of("default mouse"),
+      /* primary */ true);
 
   public Actions click(WebElement target) {
-    tick(defaultMouse.createMouseMove(Duration.ofMillis(250), target, 1, 1));
-    tick(defaultMouse.createMouseDown(0));
-    tick(defaultMouse.createMouseUp(0));
+    tick(defaultMouse.createPointerMove(Duration.ofMillis(250), target, 1, 1));
+    tick(defaultMouse.createPointerDown(0));
+    tick(defaultMouse.createPointerUp(0));
 
     return this;
   }

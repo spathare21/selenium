@@ -7,14 +7,18 @@ import org.openqa.selenium.WebElement;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
-public class MouseInput implements InputDevice, Encodable {
+public class PointerInput implements InputDevice, Encodable {
 
+  private final Kind kind;
   private final String name;
   private final boolean isPrimary;
 
-  public MouseInput(String name, boolean isPrimary) {
-    this.name = name;
+  public PointerInput(Kind kind, Optional<String> name, boolean isPrimary) {
+    this.kind = Preconditions.checkNotNull(kind, "Must set kind of pointer device");
+    this.name = name.orElse(UUID.randomUUID().toString());
     this.isPrimary = isPrimary;
   }
 
@@ -32,30 +36,30 @@ public class MouseInput implements InputDevice, Encodable {
 
     Map<String, Object> parameters = new HashMap<>();
     parameters.put("primary", isPrimary);
-    parameters.put("pointerType", "mouse");
+    parameters.put("pointerType", kind.getWireName());
     toReturn.put("parameters", parameters);
 
     return toReturn;
   }
 
-  public Action createMouseMove(Duration duration, WebElement target, int x, int y) {
+  public Action createPointerMove(Duration duration, WebElement target, int x, int y) {
     return new Move(this, duration, target, x, y);
   }
 
-  public Action createMouseDown(int button) {
-    return new MousePress(this, MousePress.Direction.DOWN, button);
+  public Action createPointerDown(int button) {
+    return new PointerPress(this, PointerPress.Direction.DOWN, button);
   }
 
-  public Action createMouseUp(int button) {
-    return new MousePress(this, MousePress.Direction.UP, button);
+  public Action createPointerUp(int button) {
+    return new PointerPress(this, PointerPress.Direction.UP, button);
   }
 
-  private static class MousePress extends Action implements Encodable {
+  private static class PointerPress extends Action implements Encodable {
 
     private final Direction direction;
     private final int button;
 
-    public MousePress(InputDevice source, Direction direction, int button) {
+    public PointerPress(InputDevice source, Direction direction, int button) {
       super(source);
 
       Preconditions.checkState(
@@ -75,7 +79,7 @@ public class MouseInput implements InputDevice, Encodable {
       return toReturn;
     }
 
-    static enum Direction {
+    enum Direction {
       DOWN("pointerDown"),
       UP("pointerUp");
 
@@ -128,6 +132,23 @@ public class MouseInput implements InputDevice, Encodable {
       toReturn.put("y", y);
 
       return toReturn;
+    }
+  }
+
+  public enum Kind {
+    MOUSE("mouse"),
+    PEN("pen"),
+    TOUCH("touch"),;
+
+    private final String wireName;
+
+
+    Kind(String pointerSubType) {
+      this.wireName = pointerSubType;
+    }
+
+    public String getWireName() {
+      return wireName;
     }
   }
 }
