@@ -30,10 +30,10 @@ public class Actions {
     return this;
   }
 
-  public Actions tick(Action... actions) {
+  public Actions tick(Interaction... actions) {
     // All actions must be for a unique device.
     Set<InputDevice> seenDevices = new HashSet<>();
-    for (Action action : actions) {
+    for (Interaction action : actions) {
       boolean freshlyAdded = seenDevices.add(action.getSource());
       if (!freshlyAdded) {
         throw new IllegalStateException(String.format(
@@ -43,7 +43,7 @@ public class Actions {
     }
 
     // Add all actions to sequences
-    for (Action action : actions) {
+    for (Interaction action : actions) {
       Sequence sequence = getSequence(action.getSource());
       sequence.addAction(action);
       seenDevices.remove(action.getSource());

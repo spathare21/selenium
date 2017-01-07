@@ -2,11 +2,11 @@ package org.openqa.selenium.interactive;
 
 import com.google.common.base.Preconditions;
 
-public abstract class Action {
+public abstract class Interaction {
 
   private final InputDevice source;
 
-  protected Action(InputDevice source) {
+  protected Interaction(InputDevice source) {
     this.source = Preconditions.checkNotNull(source);
   }
 

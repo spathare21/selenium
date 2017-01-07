@@ -23,7 +23,7 @@ class Sequence implements Encodable {
     }
   }
 
-  public Sequence addAction(Action action) {
+  public Sequence addAction(Interaction action) {
     Preconditions.checkState(action.isValidFor(device.getInputType()));
     Preconditions.checkNotNull(action instanceof Encodable);
 

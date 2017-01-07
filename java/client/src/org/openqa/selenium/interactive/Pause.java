@@ -6,7 +6,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Pause extends Action implements Encodable {
+public class Pause extends Interaction implements Encodable {
 
   private final Duration duration;
 

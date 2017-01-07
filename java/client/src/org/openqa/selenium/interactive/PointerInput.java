@@ -42,19 +42,19 @@ public class PointerInput implements InputDevice, Encodable {
     return toReturn;
   }
 
-  public Action createPointerMove(Duration duration, WebElement target, int x, int y) {
+  public Interaction createPointerMove(Duration duration, WebElement target, int x, int y) {
     return new Move(this, duration, target, x, y);
   }
 
-  public Action createPointerDown(int button) {
+  public Interaction createPointerDown(int button) {
     return new PointerPress(this, PointerPress.Direction.DOWN, button);
   }
 
-  public Action createPointerUp(int button) {
+  public Interaction createPointerUp(int button) {
     return new PointerPress(this, PointerPress.Direction.UP, button);
   }
 
-  private static class PointerPress extends Action implements Encodable {
+  private static class PointerPress extends Interaction implements Encodable {
 
     private final Direction direction;
     private final int button;
@@ -95,7 +95,7 @@ public class PointerInput implements InputDevice, Encodable {
     }
   }
 
-  private static class Move extends Action implements Encodable {
+  private static class Move extends Interaction implements Encodable {
 
     private final WebElement target;
     private final int x;
